@@ -1,0 +1,38 @@
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var courseID;
+    var deleteForm = document.forms["delete-course-form"];
+    var btnDeleteCourse = document.getElementById("btn-delete-course");
+    var checkboxAll = $("#checkbox-all");
+    var courseItemCheckbox = $('input[name="courseIDs[]"]');
+    var checkAllSubmitBtn = $(".check-all-submit-btn")
+
+    $("#delete-course-modal").on("show.bs.modal", function (event) {
+      var button = $(event.relatedTarget);
+      courseID = button.data("id");
+    });
+    btnDeleteCourse.onclick = function () {
+      deleteForm.action = "/courses/" + courseID + "?_method=DELETE";
+      deleteForm.submit();
+    };
+    checkboxAll.change(function () {
+      var isChecked = $(this).prop("checked");
+      courseItemCheckbox.prop("checked", isChecked); //
+    });
+    courseItemCheckbox.change(function () {
+      var isCheckedAll =
+        courseItemCheckbox.length ===
+        $('input[name="courseIDs[]"]:checked').length;
+      checkboxAll.prop("checked", isCheckedAll);
+    });
+    function renderCheckAllSubmitBtn() {
+      var checkedCount = $('input[name="courseIDs[]"]:checked').length;
+      if(checkedCount > 0) {
+        checkAllSubmitBtn.removeClass("disabled");
+      }
+      else{
+        checkAllSubmitBtn.addClass("disabled");
+      }
+    }
+  });
+</script>
