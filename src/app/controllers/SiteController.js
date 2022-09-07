@@ -1,4 +1,5 @@
 const Course = require("../models/Course");
+const User = require("../models/User");
 const {
   multipleMongooseToObject,
   MongooseToObject,
@@ -8,13 +9,14 @@ class SiteController {
     Course.find({})
       .then((courses) => {
         res.render("home", {
+          name:req.user.name,
           courses: multipleMongooseToObject(courses),
         });
       })
       .catch((err) => next(err));
   }
-  search(req, res) {
-    res.render("search");
+  welcome(req, res) {
+    res.render("welcome");
   }
 }
 

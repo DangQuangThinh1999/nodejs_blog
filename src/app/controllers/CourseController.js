@@ -35,6 +35,7 @@ class CourseController {
   store(req, res, next) {
     req.body.image = `https://img.youtube.com/vi/${req.body.videoId}/hqdefault.jpg`;
     const course = new Course(req.body);
+    console.log(course);
     course.save().then(res.redirect("/me/stored/courses")).catch(next);
   }
   destroy(req, res, next) {

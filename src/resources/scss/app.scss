@@ -13,3 +13,15 @@
   width: 200px;
   margin: 0 16px;
 }
+
+.login-header {
+  color: white !important;
+  font-size: 14px;
+  margin-left: 20px;
+  text-align: center;
+  text-decoration: none;
+  :hover {
+    
+    cursor: pointer;
+  }
+}

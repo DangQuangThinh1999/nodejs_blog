@@ -7,19 +7,54 @@ const methodOverride = require("method-override");
 const db = require("../src/config/db/index");
 const SortMiddleware = require("./app/middlewares/SortMiddleware");
 
+const passport = require("passport");
+const flash = require("connect-flash");
+const session = require("express-session");
+
+//----------------------------------------------------------
+// Passport Config
+require("./config/passport")(passport);
+
 // Connect DB
 db.connect();
 const app = express();
 
+
+//Express body parser
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
+
 app.use(express.json());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 const port = 3000;
+// Express session
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+    maxAge:24 * 60              
+  })
+);
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Connect flash
+app.use(flash());
+
+// Global variables
+app.use(function (req, res, next) {
+  res.locals.success = req.flash("success_msg");
+
+  res.locals.error = req.flash("error");
+  next();
+});
 
 //Customers middlewares
 app.use(SortMiddleware);
@@ -56,6 +91,7 @@ app.engine(
     },
   })
 );
+
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "resources", "views"));
 
