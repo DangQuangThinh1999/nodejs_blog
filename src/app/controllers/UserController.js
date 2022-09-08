@@ -2,6 +2,9 @@ const express = require("express");
 
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv").config();
+var cookieParser = require('cookie-parser');
 // Load User model
 const User = require("../models/User");
 
@@ -28,7 +31,7 @@ class UserController {
           bcrypt.hash(newUser.password, salt, (err, hash) => {
             if (err) throw err;
             newUser.password = hash;
-      
+
             newUser.save().then(res.redirect("/user/login")).catch(next());
           });
         });
@@ -36,20 +39,35 @@ class UserController {
     });
   }
 
-  // Login
+  // Login  METHOD POST
   handleLogin(req, res, next) {
     passport.authenticate("local", {
       successRedirect: "/",
       failureRedirect: "/user/login",
       failureFlash: true,
-    });
+    })(req, res, next);
+
+    const data = req.body.email;
+
+    jwt.sign(
+      { data },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "180s" },
+      (err, token) => {
+        res.cookie("tokenUser", `${token}`);
+   
+      }
+    );
   }
 
   // Logout
   logout(req, res, next) {
-    req.logout(function(err) {
-      if (err) { return next(err); }
-    })
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      } else {
+      }
+    });
     res.redirect("/user/login");
     next();
   }

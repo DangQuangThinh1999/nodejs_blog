@@ -10,7 +10,10 @@ const SortMiddleware = require("./app/middlewares/SortMiddleware");
 const passport = require("passport");
 const flash = require("connect-flash");
 const session = require("express-session");
-
+const dotenv = require("dotenv").config();
+//Sử dụng module cookie-parse
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 //----------------------------------------------------------
 // Passport Config
 require("./config/passport")(passport);
@@ -18,7 +21,6 @@ require("./config/passport")(passport);
 // Connect DB
 db.connect();
 const app = express();
-
 
 //Express body parser
 app.use(
@@ -37,7 +39,7 @@ app.use(
     secret: "secret",
     resave: true,
     saveUninitialized: true,
-    maxAge:24 * 60              
+    maxAge: 5 * 60,
   })
 );
 
@@ -45,6 +47,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+//Khai báo sử dụng middleware cookieParse()
+app.use(cookieParser());
 // Connect flash
 app.use(flash());
 
