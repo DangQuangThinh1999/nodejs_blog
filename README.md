@@ -17,6 +17,7 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0"
   },
+  
   "devDependencies": {
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
@@ -25,3 +26,5 @@
     "nodemon": "^2.0.18",
     "prettier": "^2.7.1"
   }
+  Do you want to post a course or something?
+   resign -> login (true)-> next
